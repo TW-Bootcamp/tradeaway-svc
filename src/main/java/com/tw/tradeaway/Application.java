@@ -1,4 +1,4 @@
-package com.tw.tradeaway.config;
+package com.tw.tradeaway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,18 +1,15 @@
 package com.tw.tradeaway.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by prateeks on 1/13/17.
  */
 @Entity
-@Table(name="tbl_user")
+@Table(name="users")
 public class User {
 
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name="login")
