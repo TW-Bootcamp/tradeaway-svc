@@ -9,7 +9,7 @@ import java.util.Date;
  * Created by prateeks on 1/13/17.
  */
 @Entity
-@Table(name="mst_users")
+@Table(name="users")
 public class User {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

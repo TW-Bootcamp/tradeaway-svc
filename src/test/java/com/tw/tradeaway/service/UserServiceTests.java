@@ -24,7 +24,7 @@ public class UserServiceTests {
     public void getUser() throws Exception {
         User user = userService.get(1L);
         assertNotNull(user);
-        assertEquals("superadmin", user.getLogin());
+        assertEquals("superadmin", user.getUsername());
         assertEquals("superadmin123", user.getPassword());
     }
 }
