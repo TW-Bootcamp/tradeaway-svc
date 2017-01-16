@@ -22,4 +22,6 @@ dependencies {
     testCompile("org.springframework.boot:spring-boot-starter-test")
     compile group: 'postgresql', name: 'postgresql', version: '9.1-901-1.jdbc4'
     compile group: 'com.h2database', name: 'h2', version: '1.4.193'
+    compile group: 'org.flywaydb', name: 'flyway-core', version: '4.0.3'
+
 }
