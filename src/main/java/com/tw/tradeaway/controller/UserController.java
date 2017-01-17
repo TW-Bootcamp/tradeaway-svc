@@ -1,6 +1,7 @@
 package com.tw.tradeaway.controller;
 
 import com.tw.tradeaway.domain.User;
+import com.tw.tradeaway.response.ErrorResponse;
 import com.tw.tradeaway.response.UserResponse;
 import com.tw.tradeaway.service.UserService;
 import com.tw.tradeaway.validator.UserValidator;
@@ -27,10 +28,12 @@ import java.util.Map;
 public class UserController {
 
     private UserService service;
+    private UserValidator validator;
 
     @Autowired
-    public UserController(UserService service) {
+    public UserController(UserService service, UserValidator validator) {
         this.service = service;
+        this.validator = validator;
     }
 
     @RequestMapping("/home")
@@ -42,19 +45,23 @@ public class UserController {
 
     @RequestMapping(method = RequestMethod.POST,  value="/register", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity createUser(@RequestBody @Valid User user){
-        UserValidator validator = new UserValidator(user, service);
-        String validatorRes = validator.isUserAlreadyExists();
-        if (!validatorRes.isEmpty()) {
-            Map<String, Object> errorResponse = new HashMap<String, Object>();
-            errorResponse.put("errorMessage", validatorRes);
+        validator.setUser(user);
+        validator.setService(service);
+        boolean validatorRes = validator.isExistingUser();
+        if (validatorRes) {
+            ErrorResponse errorResponse = new ErrorResponse(validator.getErrorMessage(), ""+HttpStatus.BAD_REQUEST);
             return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);
         }
         Map<String, Object> successResponse = new HashMap<String, Object>();
         User createdUser = service.create(user);
-        UserResponse response = new UserResponse(createdUser.getUsername(), createdUser.getName(),
-                createdUser.getEmail(), createdUser.getType());
+        UserResponse response = getUserResponse(createdUser);
         successResponse.put("user", response);
         return new ResponseEntity(successResponse, HttpStatus.OK);
+    }
+
+    private UserResponse getUserResponse(User createdUser) {
+        return new UserResponse(createdUser.getUsername(), createdUser.getName(),
+                    createdUser.getEmail(), createdUser.getType());
     }
 }
 
