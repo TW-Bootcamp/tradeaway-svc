@@ -32,9 +32,6 @@ public class User {
     @Column(name="mobile", length = 10, nullable = false)
     private String mobile;
 
-    @Column(name="type", length = 6, nullable = false)
-    private String type;
-
     @Column(name="gender")
     private char gender;
 
@@ -46,7 +43,7 @@ public class User {
     @Column(name="email_verified")
     private boolean email_verified;
 
-    @Column(name = "authority")
+    @Column(name = "authority", nullable = false)
     private String authority;
 
     public Long getId() {
@@ -103,14 +100,6 @@ public class User {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public char getGender() {

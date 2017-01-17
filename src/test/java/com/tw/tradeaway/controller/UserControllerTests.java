@@ -45,7 +45,7 @@ public class UserControllerTests {
         User createdUser = new User();
         when(userService.create(user)).thenReturn(createdUser);
 
-        UserResponse response = new UserResponse(createdUser.getUsername(), createdUser.getName(), createdUser.getEmail(), createdUser.getType());
+        UserResponse response = new UserResponse(createdUser.getUsername(), createdUser.getName(), createdUser.getEmail(), createdUser.getAuthority());
         Map<String, Object> successResponse = new HashMap<String, Object>();
         successResponse.put("user", response);
 

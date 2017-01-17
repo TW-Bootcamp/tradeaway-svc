@@ -61,7 +61,7 @@ public class UserController {
 
     private UserResponse getUserResponse(User createdUser) {
         return new UserResponse(createdUser.getUsername(), createdUser.getName(),
-                    createdUser.getEmail(), createdUser.getType());
+                    createdUser.getEmail(), createdUser.getAuthority());
     }
 }
 
