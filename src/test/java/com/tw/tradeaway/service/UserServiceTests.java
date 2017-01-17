@@ -1,30 +1,38 @@
 package com.tw.tradeaway.service;
 
 import com.tw.tradeaway.domain.User;
+import com.tw.tradeaway.repository.UserRepository;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 /**
  * Created by rsiva on 1/16/17.
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
+@RunWith(MockitoJUnitRunner.class)
 public class UserServiceTests {
 
-    @Autowired
-    UserService userService;
+    private UserService userService;
+
+    @Mock
+    private UserRepository repository;
+
+    @Before
+    public void setUp() throws Exception {
+        userService = new UserService(repository);
+    }
 
     @Test
-    public void getUser() throws Exception {
-        User user = userService.get(1L);
-        assertNotNull(user);
-        assertEquals("superadmin", user.getUsername());
-        assertEquals("superadmin123", user.getPassword());
+    public void shouldInvokeRepositoryMethod() throws Exception {
+        User user = new User();
+
+        userService.create(user);
+
+        verify(repository, times(1)).save(user);
     }
 }

@@ -1,9 +1,10 @@
 package com.tw.tradeaway.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.tw.tradeaway.LocalDateDeserializer;
+
 import javax.persistence.*;
-import javax.validation.constraints.Size;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  * Created by prateeks on 1/13/17.
@@ -40,14 +41,63 @@ public class User {
     private char gender;
 
     @Column(name="dob", nullable = false)
-    @Temporal(TemporalType.DATE)
-    private java.util.Calendar dob;
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate dob; //YYYY-MM-DD
 
-    @Column(name="is_email_verified")
-    private boolean is_email_verified;
+    @Column(name="email_verified")
+    private boolean email_verified;
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setGender(char gender) {
+        this.gender = gender;
+    }
+
+    public void setDob(LocalDate dob) {
+        this.dob = dob;
+    }
+
+    public void setEmail_verified(boolean email_verified) {
+        this.email_verified = email_verified;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public String getName() {
@@ -74,25 +124,18 @@ public class User {
         return mobile;
     }
 
-    public String getType() {
-        return type;
-    }
-
     public char getGender() {
         return gender;
     }
 
-    public Calendar getDob() {
+    public LocalDate getDob() {
         return dob;
     }
 
-    public boolean isIs_email_verified() {
-        return is_email_verified;
+    public boolean isEmail_verified() {
+        return email_verified;
     }
 
-    public void setIs_email_verified(boolean is_email_verified) {
-        this.is_email_verified = is_email_verified;
-    }
 }
 
 
