@@ -1,4 +1,6 @@
 
+delete from users;
+
 ALTER TABLE users ALTER COLUMN mobile type varchar(15);
 
 insert into users(id, name, email, username, password, address, mobile, gender, dob, email_verified, authority)
