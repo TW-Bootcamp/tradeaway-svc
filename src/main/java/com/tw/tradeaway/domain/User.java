@@ -1,13 +1,12 @@
 package com.tw.tradeaway.domain;
 
-import javax.persistence.*;
-import javax.validation.constraints.Size;
-import java.util.Calendar;
-import java.util.Date;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.tw.tradeaway.LocalDateDeserializer;
+import org.hibernate.annotations.Type;
 
-/**
- * Created by prateeks on 1/13/17.
- */
+import javax.persistence.*;
+import java.time.LocalDate;
+
 @Entity
 @Table(name="users")
 public class User {
@@ -33,69 +32,105 @@ public class User {
     @Column(name="mobile", length = 10, nullable = false)
     private String mobile;
 
-    @Column(name="type", length = 6, nullable = false)
-    private String type;
-
     @Column(name="gender")
     private char gender;
 
     @Column(name="dob", nullable = false)
-    @Temporal(TemporalType.DATE)
-    private java.util.Calendar dob;
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @Type(type="java.time.LocalDate")
+    private LocalDate dob; //YYYY-MM-DD
 
-    @Column(name="is_email_verified")
-    private boolean is_email_verified;
+    @Column(name="email_verified")
+    private boolean email_verified;
+
+    @Column(name = "authority", nullable = false)
+    private String authority;
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getEmail() {
         return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getUsername() {
         return username;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getAddress() {
         return address;
     }
 
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public String getMobile() {
         return mobile;
     }
 
-    public String getType() {
-        return type;
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
     public char getGender() {
         return gender;
     }
 
-    public Calendar getDob() {
+    public void setGender(char gender) {
+        this.gender = gender;
+    }
+
+    public LocalDate getDob() {
         return dob;
     }
 
-    public boolean isIs_email_verified() {
-        return is_email_verified;
+    public void setDob(LocalDate dob) {
+        this.dob = dob;
     }
 
-    public void setIs_email_verified(boolean is_email_verified) {
-        this.is_email_verified = is_email_verified;
+    public boolean isEmail_verified() {
+        return email_verified;
+    }
+
+    public void setEmail_verified(boolean email_verified) {
+        this.email_verified = email_verified;
+    }
+
+    public String getAuthority() {
+        return authority;
+    }
+
+    public void setAuthority(String authority) {
+        this.authority = authority;
     }
 }
-
-
-
-
-

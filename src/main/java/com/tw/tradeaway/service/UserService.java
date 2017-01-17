@@ -13,15 +13,23 @@ import javax.transaction.Transactional;
 @Service
 public class UserService {
 
-    @Autowired
     private UserRepository repository;
 
-    @Transactional
-    public void create(User user){
-        repository.save(user);
+    @Autowired
+    public UserService(UserRepository repository) {
+        this.repository = repository;
     }
 
-    public User get(Long id){
-        return repository.findOne(id);
+    @Transactional
+    public User create(User user){
+        return repository.save(user);
+    }
+
+    public User findByUsername(String username){
+        return repository.findByUsername(username);
+    }
+
+    public User findByEmail(String email){
+        return repository.findByEmail(email);
     }
 }

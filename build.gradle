@@ -30,9 +30,11 @@ repositories {
 dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
-
+    compile('org.springframework.boot:spring-boot-starter-security')
+    compile('io.jsonwebtoken:jjwt:0.7.0')
     runtime('com.h2database:h2')
     runtime('org.postgresql:postgresql')
     runtime('org.flywaydb:flyway-core')
     testCompile('org.springframework.boot:spring-boot-starter-test')
+    compile('org.hibernate:hibernate-java8:5.0.11.Final')
 }
