@@ -1,12 +1,10 @@
 package com.tw.tradeaway.controller;
 
-import com.tw.tradeaway.domain.User;
 import com.tw.tradeaway.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -26,11 +24,6 @@ public class HomeController {
         Logger logger = LoggerFactory.getLogger(HomeController.class);
         logger.error("we will explain");
         return "bootcamp";
-    }
-
-    @RequestMapping(method = RequestMethod.POST)
-    public void save(User user){
-        service.create(user);
     }
 
 //    @RequestMapping(path = "/{id}",method = RequestMethod.GET)

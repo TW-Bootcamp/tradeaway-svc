@@ -1,7 +1,9 @@
 package com.tw.tradeaway.service;
 
 import com.tw.tradeaway.domain.User;
+import com.tw.tradeaway.repository.BuyerRepository;
 import com.tw.tradeaway.repository.UserRepository;
+import com.tw.tradeaway.request.UserRequest;
 import com.tw.tradeaway.service.email.EmailService;
 import com.tw.tradeaway.service.token.UserVerificationTokenService;
 import org.junit.Before;
@@ -21,7 +23,14 @@ public class UserServiceTests {
     private UserService userService;
 
     @Mock
-    private UserRepository repository;
+    private UserRepository userRepository;
+
+    @Mock
+    private BuyerRepository buyerRepository;
+
+    private UserRequest userRequest;
+
+    private User user;
 
     @Mock
     private EmailService emailService;
@@ -31,16 +40,36 @@ public class UserServiceTests {
 
     @Before
     public void setUp() throws Exception {
-        userService = new UserService(repository,emailService,tokenService);
+        userService = new UserService(userRepository, buyerRepository,emailService,tokenService);
+
+        userRequest = new UserRequest();
+        user = new User();
+
+        userRequest.setUsername("test");
+        userRequest.setEmail("test@email.com");
+        userRequest.setName("test");
+        userRequest.setAddress("test Pune");
+        userRequest.setMobile("1234567890");
+        userRequest.setPassword("test123");
+        userRequest.setAuthority("role_buyer");
+
+        //user.setId();
+        user.setEmail_verified(false);
+        user.setUsername(userRequest.getUsername());
+        user.setName(userRequest.getName());
+        user.setEmail(userRequest.getEmail());
+        user.setAddress(userRequest.getAddress());
+        user.setMobile(userRequest.getMobile());
+        user.setPassword(userRequest.getPassword());
+        user.setAuthority(userRequest.getAuthority());
+
     }
 
     @Test
     public void shouldInvokeRepositoryMethod() throws Exception {
-        User user = new User();
         when(emailService.sendEmail(user.getName(),user.getEmail(),"token")).thenReturn(null);
-        when(repository.save(user)).thenReturn(new User());
-        userService.create(user);
-
-        verify(repository, times(1)).save(user);
+        when(userRepository.save(user)).thenReturn(new User());
+        userService.create(userRequest);
+        verify(userRepository, times(1)).save(user);
     }
 }

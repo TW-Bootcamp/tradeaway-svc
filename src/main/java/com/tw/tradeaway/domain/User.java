@@ -1,11 +1,6 @@
 package com.tw.tradeaway.domain;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.tw.tradeaway.LocalDateDeserializer;
-import org.hibernate.annotations.Type;
-
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @Entity
 @Table(name="users")
@@ -32,19 +27,24 @@ public class User {
     @Column(name="mobile", length = 10, nullable = false)
     private String mobile;
 
-    @Column(name="gender")
-    private char gender;
-
-    @Column(name="dob", nullable = false)
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    @Type(type="java.time.LocalDate")
-    private LocalDate dob; //YYYY-MM-DD
-
     @Column(name="email_verified")
     private boolean email_verified;
 
     @Column(name = "authority", nullable = false)
     private String authority;
+
+    public User(){
+    }
+
+    public User(String name, String email, String username, String password, String address, String mobile, String authority) {
+        this.name = name;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.address = address;
+        this.mobile = mobile;
+        this.authority = authority;
+    }
 
     public Long getId() {
         return id;
@@ -102,22 +102,6 @@ public class User {
         this.mobile = mobile;
     }
 
-    public char getGender() {
-        return gender;
-    }
-
-    public void setGender(char gender) {
-        this.gender = gender;
-    }
-
-    public LocalDate getDob() {
-        return dob;
-    }
-
-    public void setDob(LocalDate dob) {
-        this.dob = dob;
-    }
-
     public boolean isEmail_verified() {
         return email_verified;
     }
@@ -132,5 +116,37 @@ public class User {
 
     public void setAuthority(String authority) {
         this.authority = authority;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (email_verified != user.email_verified) return false;
+        if (id != null ? !id.equals(user.id) : user.id != null) return false;
+        if (name != null ? !name.equals(user.name) : user.name != null) return false;
+        if (email != null ? !email.equals(user.email) : user.email != null) return false;
+        if (username != null ? !username.equals(user.username) : user.username != null) return false;
+        if (password != null ? !password.equals(user.password) : user.password != null) return false;
+        if (address != null ? !address.equals(user.address) : user.address != null) return false;
+        if (mobile != null ? !mobile.equals(user.mobile) : user.mobile != null) return false;
+        return authority != null ? authority.equals(user.authority) : user.authority == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (username != null ? username.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (address != null ? address.hashCode() : 0);
+        result = 31 * result + (mobile != null ? mobile.hashCode() : 0);
+        result = 31 * result + (email_verified ? 1 : 0);
+        result = 31 * result + (authority != null ? authority.hashCode() : 0);
+        return result;
     }
 }

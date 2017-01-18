@@ -1,6 +1,7 @@
 package com.tw.tradeaway.validator;
 
 import com.tw.tradeaway.domain.User;
+import com.tw.tradeaway.request.UserRequest;
 import com.tw.tradeaway.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,18 +20,18 @@ public class UserValidatorTest {
 
   private UserValidator userValidator = new UserValidator();
 
-  private User user;
+  private UserRequest userRequest;
 
   @Before
   public void setUp() throws Exception {
     userValidator.setService(userService);
-    user = new User();
-    userValidator.setUser(user);
+    userRequest = new UserRequest();
+    userValidator.setUser(userRequest);
   }
 
   @Test
   public void verifyUserWithUserNameExists() throws Exception {
-    when(userService.findByUsername(user.getUsername())).thenReturn(new User());
+    when(userService.findByUsername(userRequest.getUsername())).thenReturn(new User());
 
     boolean actualValue = userValidator.isExistingUser();
 
@@ -41,7 +42,7 @@ public class UserValidatorTest {
 
   @Test
   public void verifyUserWithEmailExists() throws Exception {
-    when(userService.findByEmail(user.getEmail())).thenReturn(new User());
+    when(userService.findByEmail(userRequest.getEmail())).thenReturn(new User());
 
     boolean actualValue = userValidator.isExistingUser();
 
@@ -52,7 +53,7 @@ public class UserValidatorTest {
 
   @Test
   public void verifyUserWithUserNameDoesNotExist() throws Exception {
-    when(userService.findByUsername(user.getUsername())).thenReturn(null);
+    when(userService.findByUsername(userRequest.getUsername())).thenReturn(null);
 
     boolean actualValue = userValidator.isExistingUser();
 
@@ -61,7 +62,7 @@ public class UserValidatorTest {
 
   @Test
   public void verifyUserWithEmailDoesNotExist() throws Exception {
-    when(userService.findByEmail(user.getEmail())).thenReturn(null);
+    when(userService.findByEmail(userRequest.getEmail())).thenReturn(null);
 
     boolean actualValue = userValidator.isExistingUser();
 
