@@ -32,13 +32,6 @@ public class User {
     @Column(name="mobile", length = 10, nullable = false)
     private String mobile;
 
-   // @Column(name="gender")
-   // private char gender;
-
-   /* @Column(name="dob", nullable = false)
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    @Type(type="java.time.LocalDate")
-    private LocalDate dob; //YYYY-MM-DD */
 
     @Column(name="email_verified")
     private boolean email_verified;
@@ -101,23 +94,6 @@ public class User {
     public void setMobile(String mobile) {
         this.mobile = mobile;
     }
-
-    /*public char getGender() {
-        return gender;
-    }
-
-    public void setGender(char gender) {
-        this.gender = gender;
-    }
-
-    public LocalDate getDob() {
-        return dob;
-    }
-
-    public void setDob(LocalDate dob) {
-        this.dob = dob;
-    }
-    */
 
     public boolean isEmail_verified() {
         return email_verified;
