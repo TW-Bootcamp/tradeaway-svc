@@ -11,16 +11,6 @@ public class EmailResponse {
     public EmailResponse() {
     }
 
-    @Override
-    public String toString() {
-        return String.format("[EmailResponse] responseCode %s, message %s", responseCode, message);
-    }
-
-    public EmailResponse(int responseCode, String message) {
-        this.responseCode = responseCode;
-        this.message = message;
-    }
-
     public String getMessage() {
         return message;
     }

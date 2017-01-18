@@ -25,7 +25,7 @@ public class EmailServiceTest {
 
     @Test
     public void shouldSendEmail() throws EmailServiceException {
-        EmailResponse emailResponse = emailService.sendEmail( "Vijay",  "ksvikash@thoughtworks.com", UUID.randomUUID().toString());
+        EmailResponse emailResponse = emailService.sendEmail( "Vijay",  "vijayv@thoughtworks.com", UUID.randomUUID().toString());
         assertThat(emailResponse).isNotNull();
         assertThat(emailResponse.getResponseCode()).isEqualTo(200);
     }
