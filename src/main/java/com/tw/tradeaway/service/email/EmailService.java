@@ -35,12 +35,20 @@ public class EmailService {
     }
 
     public EmailResponse sendEmail(String name, String toEmail, String verificationToken) throws EmailServiceException {
-        EmailResponse emailResponse = emailServiceProvider.sendMessage(new Email(name, toEmail, subject, getText(name, verificationToken, messageText)));
+        Email email = new Email(name, toEmail, subject, getText(name, toEmail, verificationToken, getMessageText()));
+        EmailResponse emailResponse = emailServiceProvider.sendMessage(email);
         return emailResponse;
     }
 
-    private String getText(String name, String verificationToken, String textTemplate) {
-        return String.format(textTemplate, name, String.format(verficationUrl, verificationToken));
+    private String getText(String name, String email, String verificationToken, String textTemplate) {
+        String formLinkUrl = formLinkUrl(email, verificationToken);
+        String formatedMessageText = String.format(textTemplate, name, formLinkUrl);
+        System.out.println(formatedMessageText);
+        return formatedMessageText;
+    }
+
+    private String formLinkUrl(String email, String verificationToken) {
+        return String.format(verficationUrl, verificationToken, email);
     }
 
     @Bean

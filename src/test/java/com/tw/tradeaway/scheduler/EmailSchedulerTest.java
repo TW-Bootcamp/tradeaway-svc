@@ -1,43 +1,58 @@
 package com.tw.tradeaway.scheduler;
 
-import com.tw.tradeaway.service.email.EmailResponse;
-import com.tw.tradeaway.service.email.EmailService;
-import com.tw.tradeaway.service.email.EmailServiceException;
-import junit.textui.TestRunner;
-import org.assertj.core.api.Assertions;
+import com.tw.tradeaway.service.email.*;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.PrintStream;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
+import java.util.*;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Created by vikash on 18/01/17.
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
+@RunWith(MockitoJUnitRunner.class)
 public class EmailSchedulerTest {
     public static final String EMAIL = "ksvikash@thougtworks.com";
     public static final String NAME = "Vicky";
     public static final String TOKEN = "123456";
 
-    @Autowired
+
+
+    public static final String LINK_URL = "http://localhost:8080/tradeaway/api/users/verification?token=12345&email="+EMAIL;
+    public static final String SUBJECT = "Email Verification - Tradeaway";
+
+    private FileSystemResource fileSystemResource;
+
     private EmailScheduler emailScheduler;
+    @Mock
+    private EmailService emailService;
+
+    @Before
+    public void setUp() throws Exception {
+        emailScheduler = new EmailScheduler();
+        ReflectionTestUtils.setField(emailScheduler, "emailService", emailService);
+        ReflectionTestUtils.setField(emailService, "verficationUrl", LINK_URL);
+        ReflectionTestUtils.setField(emailService, "subject", SUBJECT);
+        System.out.println(new File("src/test/resources/email.template").exists());
+        fileSystemResource = new FileSystemResource("src/test/resources/email.template");
+        ReflectionTestUtils.setField(emailService, "emailTemplate", fileSystemResource);
+        Mockito.when(emailService.sendEmail(NAME, EMAIL, TOKEN)).thenReturn(new EmailResponse(200, String.format("%s %s %s", NAME, EMAIL, TOKEN)));
+    }
 
     @Test
     public void shouldScheduleEmailJob() throws EmailServiceException, ExecutionException, InterruptedException {
@@ -47,30 +62,5 @@ public class EmailSchedulerTest {
         assertThat(emailResponse.getMessage()).contains(TOKEN);
         assertThat(emailResponse.getMessage()).contains(NAME);
         assertThat(emailResponse.getMessage()).contains(EMAIL);
-    }
-
-    @Test
-    public void shouldScheduleMultipleEmailJob() throws EmailServiceException, ExecutionException, InterruptedException {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(byteArrayOutputStream));
-        emailScheduler.scheduleJob(NAME, EMAIL, TOKEN);
-        String token1 = UUID.randomUUID().toString();
-        emailScheduler.scheduleJob("Vijay", EMAIL, token1);
-        String token2 = UUID.randomUUID().toString();
-        emailScheduler.scheduleJob("Verma", EMAIL, token2);
-        TimeUnit.SECONDS.sleep(2);
-        byte[] obj = byteArrayOutputStream.toByteArray();
-        String tempString = new String(obj);
-        String[] results = tempString.split("\n");
-
-        Map<String, String> resultMap = Arrays.stream(results).map((elem) -> elem.split(" token "))
-                .collect(Collectors.toMap(e -> e[1].trim(), e -> e[0]));
-        assertThat(resultMap.get(TOKEN)).isEqualToIgnoringCase("responseCode 200, name Vicky, email ksvikash@thougtworks.com,");
-        assertThat(resultMap.get(token1)).isEqualToIgnoringCase("responseCode 200, name Vijay, email ksvikash@thougtworks.com,");
-        assertThat(resultMap.get(token2)).isEqualToIgnoringCase("responseCode 200, name Verma, email ksvikash@thougtworks.com,");
-
-//        assertThat(tempString).contains("[EmailResponse] responseCode 200, message name Vicky, email ksvikash@thougtworks.com, token 123456\n"+
-//                "[EmailResponse] responseCode 200, message name Vijay, email ksvikash@thougtworks.com, token "+token1+"\n"+
-//                "[EmailResponse] responseCode 200, message name Verma, email ksvikash@thougtworks.com, token "+token2+"\n");
     }
 }
