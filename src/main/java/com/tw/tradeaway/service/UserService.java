@@ -45,7 +45,7 @@ public class UserService {
 
         User persistedUser = userRepository.save(user);
         try {
-            emailService.sendEmail(persistedUser.getName(),persistedUser.getEmail(),this.tokenService.generate(user));
+            emailService.sendEmail(persistedUser.getName(),persistedUser.getEmail(),this.tokenService.generate(persistedUser));
         } catch (EmailServiceException e) {
             LOGGER.error("Sending email failed for username:{} , email:{} ",user.getUsername(),user.getEmail(),e);
         }
@@ -55,6 +55,13 @@ public class UserService {
         }
 
         return persistedUser;
+    }
+
+    @Transactional
+    public User verifyEmail(String username){
+        User user = this.findByUsername(username);
+        user.setEmail_verified(true);
+        return  userRepository.save(user);
     }
 
     public User findByUsername(String username){

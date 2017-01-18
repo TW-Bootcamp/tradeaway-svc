@@ -5,8 +5,10 @@ import com.tw.tradeaway.security.JwtAuthenticationRequest;
 import com.tw.tradeaway.security.JwtAuthenticationResponse;
 import com.tw.tradeaway.security.JwtTokenUtil;
 import com.tw.tradeaway.security.JwtUser;
+import com.tw.tradeaway.service.token.UserVerificationTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,12 +17,11 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+
+
 
 @RestController
 public class AuthenticationController {
@@ -36,6 +37,9 @@ public class AuthenticationController {
 
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private UserVerificationTokenService tokenService;
 
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException {
@@ -63,5 +67,15 @@ public class AuthenticationController {
         String username = jwtTokenUtil.getUsernameFromToken(token);
         JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(username);
         return user;
+    }
+
+
+    @RequestMapping(value = "/auth/verification",method = RequestMethod.POST)
+    public ResponseEntity validateToken(@RequestParam("username")String username, @RequestParam("token") String token){
+        JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(username);
+        if(tokenService.validate(user,token)){
+            return ResponseEntity.ok().build();
+        }
+        return new ResponseEntity(HttpStatus.UNAUTHORIZED);
     }
 }

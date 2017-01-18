@@ -53,7 +53,6 @@ public class UserServiceTests {
         userRequest.setPassword("test123");
         userRequest.setAuthority("role_buyer");
 
-        //user.setId();
         user.setEmail_verified(false);
         user.setUsername(userRequest.getUsername());
         user.setName(userRequest.getName());
