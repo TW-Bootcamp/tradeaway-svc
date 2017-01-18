@@ -1,0 +1,8 @@
+package com.tw.tradeaway.repository;
+
+import com.tw.tradeaway.domain.Category;
+import org.springframework.data.repository.CrudRepository;
+
+public interface CategoryRepository extends CrudRepository<Category, Long>{
+
+}
