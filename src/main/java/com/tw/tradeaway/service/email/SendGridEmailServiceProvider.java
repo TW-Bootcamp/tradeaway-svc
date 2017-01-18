@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
 
 /**
  * Created by vikash on 17/01/17.
@@ -37,6 +38,11 @@ public class SendGridEmailServiceProvider implements EmailServiceProvider {
             request.endpoint = "mail/send";
             request.body = mail.build();
             Response response = sg.api(request);
+
+            //todo call async service
+
+
+
             EmailResponse emailResponse = new EmailResponse();
             emailResponse.setResponseCode(response.statusCode == 202 ? 200 : response.statusCode);
             emailResponse.setMessage(response.body);
