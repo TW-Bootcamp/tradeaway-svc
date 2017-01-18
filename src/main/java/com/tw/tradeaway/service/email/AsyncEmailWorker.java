@@ -12,7 +12,6 @@ import java.util.concurrent.Callable;
 public class AsyncEmailWorker implements Callable<EmailResponse> {
 
     private EmailService emailService;
-
     private String userName;
     private String token;
     private String email;

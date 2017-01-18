@@ -20,16 +20,19 @@ public class AsyncEmailWorkerTest {
     public static final String NAME = "Vicky";
     public static final String TOKEN = "123456";
     @Autowired
-    private AsyncEmailWorker asyncEmailWorker;
+    private EmailService emailService;
+
     @Test
     public void shouldSendEmailAsync() throws ExecutionException, InterruptedException {
+        AsyncEmailWorker asyncEmailWorker = new AsyncEmailWorker(emailService);
         asyncEmailWorker.setEmail(EMAIL);
         asyncEmailWorker.setUserName(NAME);
         asyncEmailWorker.setToken(TOKEN);
         Future<EmailResponse> responseFuture = Executors.newSingleThreadExecutor().submit(asyncEmailWorker);
         EmailResponse emailResponse = responseFuture.get();
         assertThat(emailResponse).isNotNull();
-        assertThat(emailResponse.getMessage()).isEqualToIgnoringCase(String.format("name %s, email %s, token %s", NAME, EMAIL, TOKEN));
-
+        assertThat(emailResponse.getMessage()).contains(EMAIL);
+        assertThat(emailResponse.getMessage()).contains(NAME);
+        assertThat(emailResponse.getMessage()).contains(TOKEN);
     }
 }

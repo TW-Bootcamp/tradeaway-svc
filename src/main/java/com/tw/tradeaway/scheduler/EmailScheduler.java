@@ -5,6 +5,8 @@ import com.tw.tradeaway.service.email.EmailResponse;
 import com.tw.tradeaway.service.email.EmailService;
 import com.tw.tradeaway.service.email.EmailServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.*;
@@ -19,10 +21,9 @@ public class EmailScheduler {
     private static final int CAPACITY = 500;
     private static final int POOL_SIZE = Runtime.getRuntime().availableProcessors() * 2;
 
+    private ExecutorService executor;
     @Autowired
     private EmailService emailService;
-    private ExecutorService executor;
-
 
     public EmailScheduler() {
         executor = Executors.newFixedThreadPool(POOL_SIZE);
@@ -37,7 +38,6 @@ public class EmailScheduler {
         return response;
     }
 
-    @Autowired
     public AsyncEmailWorker getEmailWorker() {
         return new AsyncEmailWorker(emailService);
     }

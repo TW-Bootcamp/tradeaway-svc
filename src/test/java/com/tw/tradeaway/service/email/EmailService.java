@@ -15,7 +15,6 @@ import java.io.InputStream;
  * Created by vikash on 17/01/17.
  */
 @Service
-@Qualifier("EmailService")
 public class EmailService {
 
 
@@ -37,8 +36,8 @@ public class EmailService {
     }
 
     public EmailResponse sendEmail(String name, String toEmail, String verificationToken) throws EmailServiceException {
-        EmailResponse emailResponse = new EmailResponse(200, String.format("name %s, email %s, token %s", name, toEmail, verificationToken));
-        System.out.println(emailResponse);
+        EmailResponse emailResponse = emailServiceProvider.sendMessage(new Email(name, toEmail, subject, getText(name, verificationToken, messageText)));
+        System.out.println(String.format("responseCode %s, name %s, email %s, token %s", "200", name, toEmail, verificationToken));
         return emailResponse;
     }
 

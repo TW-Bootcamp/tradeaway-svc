@@ -44,8 +44,9 @@ public class EmailSchedulerTest {
         Future<EmailResponse> emailResponseFuture = emailScheduler.scheduleJob(NAME, EMAIL, TOKEN);
         EmailResponse emailResponse = emailResponseFuture.get();
         assertThat(emailResponse).isNotNull();
-        assertThat(emailResponse.getMessage()).isEqualToIgnoringCase(String.format("name %s, email %s, token %s", NAME, EMAIL, TOKEN));
-
+        assertThat(emailResponse.getMessage()).contains(TOKEN);
+        assertThat(emailResponse.getMessage()).contains(NAME);
+        assertThat(emailResponse.getMessage()).contains(EMAIL);
     }
 
     @Test
@@ -61,13 +62,12 @@ public class EmailSchedulerTest {
         byte[] obj = byteArrayOutputStream.toByteArray();
         String tempString = new String(obj);
         String[] results = tempString.split("\n");
+
         Map<String, String> resultMap = Arrays.stream(results).map((elem) -> elem.split(" token "))
                 .collect(Collectors.toMap(e -> e[1].trim(), e -> e[0]));
-        System.out.println(resultMap);
-
-        assertThat(resultMap.get(TOKEN)).isEqualToIgnoringCase("[EmailResponse] responseCode 200, message name Vicky, email ksvikash@thougtworks.com,");
-        assertThat(resultMap.get(token1)).isEqualToIgnoringCase("[EmailResponse] responseCode 200, message name Vijay, email ksvikash@thougtworks.com,");
-        assertThat(resultMap.get(token2)).isEqualToIgnoringCase("[EmailResponse] responseCode 200, message name Verma, email ksvikash@thougtworks.com,");
+        assertThat(resultMap.get(TOKEN)).isEqualToIgnoringCase("responseCode 200, name Vicky, email ksvikash@thougtworks.com,");
+        assertThat(resultMap.get(token1)).isEqualToIgnoringCase("responseCode 200, name Vijay, email ksvikash@thougtworks.com,");
+        assertThat(resultMap.get(token2)).isEqualToIgnoringCase("responseCode 200, name Verma, email ksvikash@thougtworks.com,");
 
 //        assertThat(tempString).contains("[EmailResponse] responseCode 200, message name Vicky, email ksvikash@thougtworks.com, token 123456\n"+
 //                "[EmailResponse] responseCode 200, message name Vijay, email ksvikash@thougtworks.com, token "+token1+"\n"+

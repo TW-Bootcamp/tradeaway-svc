@@ -7,9 +7,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
 
 /**
  * Created by vikash on 17/01/17.
@@ -32,19 +29,10 @@ public class SendGridEmailServiceProvider implements EmailServiceProvider {
     @Override
     public EmailResponse sendMessage(Email email) throws EmailServiceException {
         Request request = new Request();
-        try {
-            Mail mail = new Mail(new com.sendgrid.Email(from), email.getSubject(), new com.sendgrid.Email(email.getTo()), new Content("text/html", email.getText()));
-            request.method = Method.POST;
-            request.endpoint = "mail/send";
-            request.body = mail.build();
-            Response response = sg.api(request);
-            EmailResponse emailResponse = new EmailResponse();
-            emailResponse.setResponseCode(response.statusCode == 202 ? 200 : response.statusCode);
-            emailResponse.setMessage(response.body);
-            return emailResponse;
-        } catch (IOException ex) {
-            throw new EmailServiceException(ex);
-        }
+        EmailResponse emailResponse = new EmailResponse();
+        emailResponse.setResponseCode(200);
+        emailResponse.setMessage(String.format("name %s, to %s, text %s", email.getName(), email.getTo(), email.getText()));
+        return emailResponse;
     }
 
     @Bean
