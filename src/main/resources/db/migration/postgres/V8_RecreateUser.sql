@@ -1,0 +1,4 @@
+
+ALTER TABLE users DROP COLUMN dob;
+ALTER TABLE users DROP COLUMN gender;
+
