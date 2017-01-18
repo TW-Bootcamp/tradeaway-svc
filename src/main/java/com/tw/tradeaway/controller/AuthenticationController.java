@@ -4,6 +4,7 @@ package com.tw.tradeaway.controller;
 import com.tw.tradeaway.security.JwtAuthenticationRequest;
 import com.tw.tradeaway.security.JwtAuthenticationResponse;
 import com.tw.tradeaway.security.JwtTokenUtil;
+import com.tw.tradeaway.security.JwtUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
-public class AuthenticationRestController {
+public class AuthenticationController {
 
     @Value("${jwt.header}")
     private String tokenHeader;
@@ -54,4 +57,11 @@ public class AuthenticationRestController {
         return ResponseEntity.ok(new JwtAuthenticationResponse(token));
     }
 
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    public JwtUser getAuthenticatedUser(HttpServletRequest request) {
+        String token = request.getHeader(tokenHeader);
+        String username = jwtTokenUtil.getUsernameFromToken(token);
+        JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(username);
+        return user;
+    }
 }
