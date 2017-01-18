@@ -1,6 +1,7 @@
 package com.tw.tradeaway.validator;
 
 import com.tw.tradeaway.domain.User;
+import com.tw.tradeaway.request.UserRequest;
 import com.tw.tradeaway.service.UserService;
 import org.springframework.stereotype.Component;
 
@@ -9,12 +10,12 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class UserValidator {
-    private User user;
+    private UserRequest userRequest;
     private UserService service;
     private String errorMessage;
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(UserRequest userRequest) {
+        this.userRequest = userRequest;
     }
 
     public void setService(UserService service) {
@@ -40,7 +41,7 @@ public class UserValidator {
     }
 
     private boolean isExistingUsername() {
-        User existingUser = service.findByUsername(user.getUsername());
+        User existingUser = service.findByUsername(userRequest.getUsername());
         if (existingUser != null) {
             return true;
         }
@@ -48,7 +49,7 @@ public class UserValidator {
     }
 
     private boolean isExistingEmail() {
-        User existingUser = service.findByEmail(user.getEmail());
+        User existingUser = service.findByEmail(userRequest.getEmail());
         if (existingUser != null) {
             return true;
         }
