@@ -45,7 +45,7 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value="/register", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity createUser(@RequestBody @Valid UserRequest userRequest){
+    public ResponseEntity createUser(@RequestBody @Valid UserRequest userRequest) throws Exception {
         validator.setUser(userRequest);
         validator.setService(service);
         boolean validatorRes = validator.isExistingUser();
@@ -61,8 +61,7 @@ public class UserController {
     }
 
     private UserResponse getUserResponse(User createdUser) {
-        return new UserResponse(createdUser.getUsername(), createdUser.getName(),
-                    createdUser.getEmail(), createdUser.getAuthority());
+        return new UserResponse(createdUser.getUsername(), createdUser.getAuthority());
     }
 }
 

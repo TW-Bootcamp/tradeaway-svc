@@ -13,13 +13,10 @@ public final class JwtUserFactory {
     public static JwtUser create(User user) {
         return new JwtUser(
                 user.getId(),
-                user.getName(),
                 user.getUsername(),
-                user.getEmail(),
                 user.getPassword(),
                 Arrays.asList(new SimpleGrantedAuthority(user.getAuthority())),
-                true,
-                null
+                true
         );
     }
 

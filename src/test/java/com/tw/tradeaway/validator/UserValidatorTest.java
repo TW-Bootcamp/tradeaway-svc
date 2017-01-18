@@ -1,6 +1,8 @@
 package com.tw.tradeaway.validator;
 
+import com.tw.tradeaway.domain.Buyer;
 import com.tw.tradeaway.domain.User;
+import com.tw.tradeaway.repository.BuyerRepository;
 import com.tw.tradeaway.request.UserRequest;
 import com.tw.tradeaway.service.UserService;
 import org.junit.Before;
@@ -8,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.stubbing.OngoingStubbing;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -42,7 +45,9 @@ public class UserValidatorTest {
 
   @Test
   public void verifyUserWithEmailExists() throws Exception {
-    when(userService.findByEmail(userRequest.getEmail())).thenReturn(new User());
+
+
+       when(userService.findByEmail(userRequest.getEmail(), userRequest.getAuthority())).thenReturn(true);
 
     boolean actualValue = userValidator.isExistingUser();
 
@@ -50,6 +55,7 @@ public class UserValidatorTest {
 
     assertThat("Email already registered.!!!").isEqualTo(userValidator.getErrorMessage());
   }
+
 
   @Test
   public void verifyUserWithUserNameDoesNotExist() throws Exception {
@@ -60,12 +66,14 @@ public class UserValidatorTest {
     assertThat(actualValue).isEqualTo(false);
   }
 
+
   @Test
   public void verifyUserWithEmailDoesNotExist() throws Exception {
-    when(userService.findByEmail(userRequest.getEmail())).thenReturn(null);
+    when(userService.findByEmail(userRequest.getEmail() ,userRequest.getAuthority())).thenReturn(false);
 
     boolean actualValue = userValidator.isExistingUser();
 
     assertThat(actualValue).isEqualTo(false);
   }
+
 }

@@ -61,7 +61,6 @@ public class AuthenticationTests {
         assertNotNull(jwtUserResponseEntity);
         assertNotNull(jwtUserResponseEntity.getBody());
         assertTrue(jwtUserResponseEntity.getStatusCode() == HttpStatus.OK);
-        assertTrue(jwtUserResponseEntity.getBody().contains("admin1@gmail.com"));
     }
 
 }

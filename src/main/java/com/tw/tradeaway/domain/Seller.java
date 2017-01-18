@@ -9,8 +9,8 @@ import java.time.LocalDate;
  * Created by poojadhupar on 1/18/17.
  */
 @Entity
-@Table(name="buyers")
-public class Buyer {
+@Table(name="sellers")
+public class Seller {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,24 +28,23 @@ public class Buyer {
     @Column(name="mobile", length = 10, nullable = false)
     private String mobile;
 
-    @Column(name="gender")
-    private char gender;
+    @Column(name="pan_number", nullable = false)
+    private String pan_number ;
 
-    @Column(name="dob", nullable = false)
-    @Type(type="java.time.LocalDate")
-    private LocalDate dob;
+    @Column(name="experience_in_months", nullable = false)
+    private Integer experience_in_months;
 
     @JoinColumn(name="user_id", nullable = false)
     @OneToOne
     private User user;
 
-    public Buyer(){
+    public Seller(){
 
     }
+    public Seller(User user , String name, String email, String address, String mobile ,String pan_number ,Integer experience_in_months) {
 
-    public Buyer(LocalDate dob, User user ,String name, String email,  String address, String mobile) {
-
-        this.dob = dob;
+        this.pan_number = pan_number;
+        this.experience_in_months = experience_in_months;
         this.user = user;
         this.name = name;
         this.email = email;
@@ -61,12 +60,12 @@ public class Buyer {
         this.id = id;
     }
 
-    public char getGender() {
-        return gender;
+    public Integer getExperienceInMonths() {
+        return experience_in_months;
     }
 
-    public void setGender(char gender) {
-        this.gender = gender;
+    public void setExperienceInMonths(Integer experience_in_months) {
+        this.experience_in_months = experience_in_months;
     }
 
     public User getUser() {
@@ -77,12 +76,12 @@ public class Buyer {
         this.user = user;
     }
 
-    public LocalDate getDob() {
-        return dob;
+    public String getPanNumber() {
+        return pan_number;
     }
 
-    public void setDob(LocalDate dob) {
-        this.dob = dob;
+    public void setPanNumber(String pan_number) {
+        this.pan_number = pan_number;
     }
 
     public String getName() {

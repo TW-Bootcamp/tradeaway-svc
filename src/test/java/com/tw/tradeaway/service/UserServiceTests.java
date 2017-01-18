@@ -1,7 +1,10 @@
 package com.tw.tradeaway.service;
 
+import com.tw.tradeaway.domain.Buyer;
+import com.tw.tradeaway.domain.Seller;
 import com.tw.tradeaway.domain.User;
 import com.tw.tradeaway.repository.BuyerRepository;
+import com.tw.tradeaway.repository.SellerRepository;
 import com.tw.tradeaway.repository.UserRepository;
 import com.tw.tradeaway.request.UserRequest;
 import org.junit.Before;
@@ -27,35 +30,41 @@ public class UserServiceTests {
     @Mock
     private BuyerRepository buyerRepository;
 
+    @Mock
+    private SellerRepository sellerRepository;
+
     private UserRequest userRequest;
 
     private User user;
-
+    private Buyer buyer;
+    private Seller seller;
     @Before
     public void setUp() throws Exception {
-        userService = new UserService(userRepository, buyerRepository);
+        userService = new UserService(userRepository, buyerRepository ,sellerRepository);
 
         userRequest = new UserRequest();
         user = new User();
-
+        buyer = new Buyer();
+        seller = new Seller();
         userRequest.setUsername("test");
         userRequest.setEmail("test@email.com");
         userRequest.setName("test");
         userRequest.setAddress("test Pune");
         userRequest.setMobile("1234567890");
         userRequest.setPassword("test123");
+        userRequest.setGender('M');
         userRequest.setAuthority("role_buyer");
 
-        //user.setId();
         user.setEmail_verified(false);
         user.setUsername(userRequest.getUsername());
-        user.setName(userRequest.getName());
-        user.setEmail(userRequest.getEmail());
-        user.setAddress(userRequest.getAddress());
-        user.setMobile(userRequest.getMobile());
         user.setPassword(userRequest.getPassword());
         user.setAuthority(userRequest.getAuthority());
 
+        buyer.setEmail(userRequest.getEmail());
+        buyer.setName(userRequest.getName());
+        buyer.setAddress(userRequest.getAddress());
+        buyer.setMobile(userRequest.getMobile());
+        buyer.setGender(userRequest.getGender());
     }
 
     @Test
@@ -64,4 +73,13 @@ public class UserServiceTests {
 
         verify(userRepository, times(1)).save(user);
     }
+/*
+    @Test
+    public void shouldInvokeBuyerRepositoryMethod() throws Exception {
+        userService.create(userRequest);
+
+        verify(userRepository, times(1)).save(user);
+       // verify(buyerRepository, times(1)).save(buyer);
+    }
+   */
 }

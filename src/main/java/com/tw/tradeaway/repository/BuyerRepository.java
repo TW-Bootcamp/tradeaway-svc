@@ -1,6 +1,7 @@
 package com.tw.tradeaway.repository;
 
 import com.tw.tradeaway.domain.Buyer;
+import com.tw.tradeaway.domain.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,4 +10,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface BuyerRepository extends CrudRepository<Buyer,Long> {
+    public Buyer findByEmail(String email);
 }
