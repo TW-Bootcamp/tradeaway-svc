@@ -45,13 +45,15 @@ public class UserService {
     @Transactional
     public User create(UserRequest userRequest) throws Exception {
         User user = new User( userRequest.getUsername(), userRequest.getPassword(),userRequest.getAuthority());
-
+        System.out.println(user.getUsername());
         User persistedUser = userRepository.save(user);
 
-        if ("role_buyer".equalsIgnoreCase(userRequest.getAuthority())){
 
+        if ("role_buyer".equalsIgnoreCase(userRequest.getAuthority())){
+            System.out.println(userRequest.getDob());
             Buyer buyer = new Buyer(userRequest.getDob(), persistedUser ,userRequest.getName() ,userRequest.getEmail() ,userRequest.getAddress() ,userRequest.getMobile());
             buyer.setGender(userRequest.getGender());
+            System.out.println(buyer.getUser());
             buyerRepository.save(buyer);
 
         }
