@@ -1,9 +1,6 @@
 package com.tw.tradeaway.domain;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.annotations.Type;
-import org.hibernate.cfg.Configuration;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -29,7 +26,7 @@ public class Seller {
     private String address;
 
     @Column(name="mobile", length = 10, nullable = false)
-    private Integer mobile;
+    private String mobile;
 
     @Column(name="pan_number", nullable = false)
     private String pan_number ;
@@ -44,7 +41,7 @@ public class Seller {
     public Seller(){
 
     }
-    public Seller(User user , String name, String email, String address, Integer mobile ,String pan_number ,Integer experience_in_months) {
+    public Seller(User user , String name, String email, String address, String mobile ,String pan_number ,Integer experience_in_months) {
 
         this.pan_number = pan_number;
         this.experience_in_months = experience_in_months;
@@ -112,21 +109,12 @@ public class Seller {
         this.address = address;
     }
 
-    public Integer getMobile() {
+    public String getMobile() {
         return mobile;
     }
 
-    public void setMobile(Integer mobile) {
+    public void setMobile(String mobile) {
         this.mobile = mobile;
     }
 
-    public String getEmailByUserId(Long user_id) {
-        Configuration config = new Configuration();
-        SessionFactory sessionFactory = config.configure().buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        return String.valueOf(session.createQuery("select s.email from Seller s where s.user_id = :user_id " )
-                .setLong("user_id", user_id)
-                .uniqueResult());
-
-    }
 }

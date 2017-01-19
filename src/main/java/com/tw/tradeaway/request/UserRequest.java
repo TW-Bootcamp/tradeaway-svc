@@ -20,7 +20,7 @@ public class UserRequest {
 
     private String address;
 
-    private Integer mobile;
+    private String mobile;
 
     private String authority;
 
@@ -75,11 +75,11 @@ public class UserRequest {
         this.address = address;
     }
 
-    public Integer getMobile() {
+    public String getMobile() {
         return mobile;
     }
 
-    public void setMobile(Integer mobile) {
+    public void setMobile(String mobile) {
         this.mobile = mobile;
     }
 
