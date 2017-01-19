@@ -1,6 +1,9 @@
 package com.tw.tradeaway.domain;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.annotations.Type;
+import org.hibernate.cfg.Configuration;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -10,7 +13,7 @@ import java.time.LocalDate;
  */
 @Entity
 @Table(name="buyers")
-public class Buyer {
+public class Buyer  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -117,5 +120,15 @@ public class Buyer {
     public void setMobile(String mobile) {
         this.mobile = mobile;
     }
+
+   /* public String getEmailByUserId(Long user_id) {
+        Configuration config = new Configuration();
+        SessionFactory sessionFactory = config.configure().buildSessionFactory();
+        Session session = sessionFactory.openSession();
+      return String.valueOf(session.createQuery("select b.email from buyers b where b.user_id = :user_id " )
+                        .setLong("user_id", user_id)
+                        .uniqueResult());
+
+    } */
 
 }

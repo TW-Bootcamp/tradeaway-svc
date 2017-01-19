@@ -11,6 +11,29 @@ public class EmailResponse {
     public EmailResponse() {
     }
 
+    @Override
+    public int hashCode() {
+        int result = message.hashCode();
+        result = 31 * result + responseCode;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        EmailResponse response = (EmailResponse) obj;
+        return response.getMessage().equals(message) && response.getResponseCode() == responseCode;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("[EmailResponse] responseCode %s, message %s", responseCode, message);
+    }
+
+    public EmailResponse(int responseCode, String message) {
+        this.responseCode = responseCode;
+        this.message = message;
+    }
+
     public String getMessage() {
         return message;
     }

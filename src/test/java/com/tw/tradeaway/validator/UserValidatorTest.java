@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.OngoingStubbing;
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -47,7 +48,7 @@ public class UserValidatorTest {
   public void verifyUserWithEmailExists() throws Exception {
 
 
-       when(userService.findByEmail(userRequest.getEmail(), userRequest.getAuthority())).thenReturn(true);
+       when(userService.findByEmail(userRequest.getEmail(), userRequest.getAuthority())).thenReturn(new User());
 
     boolean actualValue = userValidator.isExistingUser();
 
@@ -69,9 +70,11 @@ public class UserValidatorTest {
 
   @Test
   public void verifyUserWithEmailDoesNotExist() throws Exception {
-    when(userService.findByEmail(userRequest.getEmail() ,userRequest.getAuthority())).thenReturn(false);
+
+    when(userService.findByEmail(userRequest.getEmail() ,userRequest.getAuthority())).thenReturn(null);
 
     boolean actualValue = userValidator.isExistingUser();
+
 
     assertThat(actualValue).isEqualTo(false);
   }

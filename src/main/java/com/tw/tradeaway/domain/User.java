@@ -1,5 +1,7 @@
 package com.tw.tradeaway.domain;
 
+import com.tw.tradeaway.repository.BuyerRepository;
+
 import javax.persistence.*;
 
 @Entity
@@ -21,6 +23,7 @@ public class User {
     @Column(name = "authority", nullable = false)
     private String authority;
 
+    private String email;
     public User(){
     }
 
@@ -95,4 +98,5 @@ public class User {
         result = 31 * result + (authority != null ? authority.hashCode() : 0);
         return result;
     }
+
 }

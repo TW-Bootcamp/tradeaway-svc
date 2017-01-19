@@ -22,7 +22,8 @@ public class UserValidator {
         this.service = service;
     }
 
-    public boolean isExistingUser()  {
+    public boolean isExistingUser() throws Exception {
+
         if (isExistingUsername()) {
             errorMessage = "Username already Exists.!!!";
             return true;
@@ -48,8 +49,15 @@ public class UserValidator {
         return false;
     }
 
-    private boolean isExistingEmail() {
-       return service.findByEmail(userRequest.getEmail() ,userRequest.getAuthority());
+    private boolean isExistingEmail() throws Exception {
+
+        User existingUser = service.findByEmail(userRequest.getEmail() ,userRequest.getAuthority());
+
+        if (existingUser != null) {
+            return true;
+        }
+        return false;
+
 
     }
 }

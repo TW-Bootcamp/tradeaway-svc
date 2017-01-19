@@ -1,6 +1,9 @@
 package com.tw.tradeaway.domain;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.annotations.Type;
+import org.hibernate.cfg.Configuration;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -117,4 +120,13 @@ public class Seller {
         this.mobile = mobile;
     }
 
+    public String getEmailByUserId(Long user_id) {
+        Configuration config = new Configuration();
+        SessionFactory sessionFactory = config.configure().buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        return String.valueOf(session.createQuery("select s.email from Seller s where s.user_id = :user_id " )
+                .setLong("user_id", user_id)
+                .uniqueResult());
+
+    }
 }

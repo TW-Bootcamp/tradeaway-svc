@@ -7,6 +7,8 @@ import com.tw.tradeaway.repository.BuyerRepository;
 import com.tw.tradeaway.repository.SellerRepository;
 import com.tw.tradeaway.repository.UserRepository;
 import com.tw.tradeaway.request.UserRequest;
+import com.tw.tradeaway.service.email.EmailService;
+import com.tw.tradeaway.service.token.UserVerificationTokenService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +17,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by rsiva on 1/16/17.
@@ -36,16 +39,24 @@ public class UserServiceTests {
     private UserRequest userRequest;
 
     private User user;
+
+    @Mock
+    private EmailService emailService;
+
+    @Mock
+    private UserVerificationTokenService tokenService;
+
     private Buyer buyer;
     private Seller seller;
     @Before
     public void setUp() throws Exception {
-        userService = new UserService(userRepository, buyerRepository ,sellerRepository);
+        userService = new UserService(userRepository, buyerRepository,sellerRepository,emailService,tokenService);
+
 
         userRequest = new UserRequest();
         user = new User();
-        buyer = new Buyer();
-        seller = new Seller();
+
+
         userRequest.setUsername("test");
         userRequest.setEmail("test@email.com");
         userRequest.setName("test");
@@ -60,18 +71,37 @@ public class UserServiceTests {
         user.setPassword(userRequest.getPassword());
         user.setAuthority(userRequest.getAuthority());
 
-        buyer.setEmail(userRequest.getEmail());
-        buyer.setName(userRequest.getName());
-        buyer.setAddress(userRequest.getAddress());
-        buyer.setMobile(userRequest.getMobile());
-        buyer.setGender(userRequest.getGender());
+
     }
 
     @Test
     public void shouldInvokeRepositoryMethod() throws Exception {
-        userService.create(userRequest);
+        if ("role_buyer".equalsIgnoreCase(userRequest.getAuthority())){
+            buyer = new Buyer();
+            buyer.setEmail(userRequest.getEmail());
+            buyer.setName(userRequest.getName());
+            buyer.setAddress(userRequest.getAddress());
+            buyer.setMobile(userRequest.getMobile());
+            buyer.setGender(userRequest.getGender());
+            when(emailService.sendEmail(buyer.getName(),buyer.getEmail(),"token")).thenReturn(null);
+            when(userRepository.save(user)).thenReturn(new User());
+            userService.create(userRequest);
+            verify(userRepository, times(1)).save(user);
+        }
+        else  if ("role_sender".equalsIgnoreCase(userRequest.getAuthority())){
+            seller = new Seller();
+            seller.setEmail(userRequest.getEmail());
+            seller.setName(userRequest.getName());
+            seller.setAddress(userRequest.getAddress());
+            seller.setMobile(userRequest.getMobile());
+            when(emailService.sendEmail(seller.getName(),seller.getEmail(),"token")).thenReturn(null);
+            when(userRepository.save(user)).thenReturn(new User());
+            userService.create(userRequest);
+            verify(userRepository, times(1)).save(user);
+        }
 
-        verify(userRepository, times(1)).save(user);
+
+
     }
 /*
     @Test
