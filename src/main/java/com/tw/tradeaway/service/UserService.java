@@ -57,8 +57,8 @@ public class UserService {
 
         }
         else if ("role_seller".equalsIgnoreCase(userRequest.getAuthority())){
-
-            Seller seller = new Seller(persistedUser ,  userRequest.getName(), userRequest.getEmail(),userRequest.getAddress(), userRequest.getMobile() ,userRequest.getPan(),userRequest.getExperienceInMonths());
+            Integer userExperinceInMonths = userRequest.getExperienceInYears()*12 +  userRequest.getExperienceInMonths();
+            Seller seller = new Seller(persistedUser ,  userRequest.getName(), userRequest.getEmail(),userRequest.getAddress(), userRequest.getMobile() ,userRequest.getPan(), userExperinceInMonths);
             sellerRepository.save(seller);
 
         }
