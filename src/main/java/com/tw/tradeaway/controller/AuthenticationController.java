@@ -21,6 +21,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 
 @RestController
@@ -72,10 +73,10 @@ public class AuthenticationController {
     }
 
 
-    @RequestMapping(value = "/auth/verification",method = RequestMethod.POST)
-    public ResponseEntity validateToken(@RequestParam("username")String username, @RequestParam("token") String token){
-        JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(username);
-        if(tokenService.validate(user,token)){
+    @RequestMapping(value = "/auth/verify",method = RequestMethod.POST)
+    public ResponseEntity validateToken(@RequestBody Map<String,String> payload){
+        JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(payload.get("username"));
+        if(tokenService.validate(user,payload.get("token"))){
             return ResponseEntity.ok().build();
         }
         return new ResponseEntity(HttpStatus.UNAUTHORIZED);
