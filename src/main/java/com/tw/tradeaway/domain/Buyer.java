@@ -29,7 +29,7 @@ public class Buyer  {
     private String address;
 
     @Column(name="mobile", length = 10, nullable = false)
-    private String mobile;
+    private Integer mobile;
 
     @Column(name="gender")
     private char gender;
@@ -46,7 +46,7 @@ public class Buyer  {
 
     }
 
-    public Buyer(LocalDate dob, User user ,String name, String email,  String address, String mobile) {
+    public Buyer(LocalDate dob, User user ,String name, String email,  String address, Integer mobile) {
 
         this.dob = dob;
         this.user = user;
@@ -113,11 +113,11 @@ public class Buyer  {
         this.address = address;
     }
 
-    public String getMobile() {
+    public Integer getMobile() {
         return mobile;
     }
 
-    public void setMobile(String mobile) {
+    public void setMobile(Integer mobile) {
         this.mobile = mobile;
     }
 
